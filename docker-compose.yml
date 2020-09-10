@@ -4,7 +4,7 @@ services:
     image: postgres:11.5
     hostname: hivemetastore
     environment:
-      POSTGRES_PASSWORD: ne0flex
+      POSTGRES_PASSWORD: new_password
     ports:
       - 5532:5432
     expose:
@@ -23,6 +23,7 @@ services:
 
   master:
     image: neoflex/bd-base
+    build: ./bd-base
     hostname: master
     depends_on:
       - hivemetastore
@@ -63,6 +64,7 @@ services:
 
   worker1:
     image: neoflex/bd-base
+    build: ./bd-base
     hostname: worker1
     depends_on:
       - hivemetastore
@@ -94,6 +96,7 @@ services:
 
   worker2:
     image: neoflex/bd-base
+    build: ./bd-base
     hostname: worker2
     depends_on:
       - hivemetastore
@@ -126,6 +129,7 @@ services:
 
   livy:
     image: neoflex/bd-livy
+    build: ./bd-livy
     hostname: livy
     depends_on:
       - master
