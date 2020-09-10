@@ -1,15 +1,19 @@
 #FROM bigdata-docker-compose_master:latest
 FROM neoflex/bd-base
 
-ARG LIVY_VERSION=0.7.0-incubating
+ARG LIVY_VERSION=0.8.0-incubating-SNAPSHOT
 ENV LIVY_HOME /usr/livy
 ENV LIVY_CONF_DIR "${LIVY_HOME}/conf"
-RUN curl --progress-bar -L --retry 3 \
-    "http://archive.apache.org/dist/incubator/livy/${LIVY_VERSION}/apache-livy-${LIVY_VERSION}-bin.zip" \
-    -o "./apache-livy-${LIVY_VERSION}-bin.zip" \
-  && unzip -qq "./apache-livy-${LIVY_VERSION}-bin.zip" -d /usr \
+RUN apk add --no-cache git maven \
+  && git clone https://github.com/apache/incubator-livy.git \
+  && cd incubator-livy \
+  && mvn package -DskipTests \
+  && unzip -qq "./assembly/target/apache-livy-${LIVY_VERSION}-bin.zip" -d /usr \
   && mv "/usr/apache-livy-${LIVY_VERSION}-bin" "${LIVY_HOME}" \
   && rm -rf "./apache-livy-${LIVY_VERSION}-bin.zip" \
+  && cd .. \
+  && rm -rf "/incubator-livy" \
+  && rm -rf "/root/.m2" \
   && mkdir "${LIVY_HOME}/logs" \
   && chown -R root:root "${LIVY_HOME}"
 
