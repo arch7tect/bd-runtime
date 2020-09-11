@@ -2,6 +2,7 @@ version: "3.7"
 services:
   hivemetastore:
     image: postgres:11.5
+    restart: always
     hostname: hivemetastore
     environment:
       POSTGRES_PASSWORD: new_password
@@ -11,7 +12,7 @@ services:
       - 5432
     volumes:
       - ./pg-init.sql:/docker-entrypoint-initdb.d/pg-init.sql
-      - hivemetastore_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -54,6 +55,8 @@ services:
       - 9868:9868
       # Hive JDBC
       - 10000:10000
+      # webhdfs
+      - 51070:50070
     volumes:
       - ./data:/data
     networks:
@@ -181,4 +184,4 @@ networks:
         - subnet: 172.20.0.0/16
 
 volumes:
-  hivemetastore_data:
+  postgres_data:

@@ -132,11 +132,11 @@ COPY conf/spark/spark-defaults.conf "${SPARK_CONF_DIR}"/
 
 # Spark with Hive
 # TODO enable in Spark 3.0
-#ENV SPARK_DIST_CLASSPATH=$SPARK_DIST_CLASSPATH:$HIVE_HOME/lib/*
-#COPY conf/hive/hive-site.xml $SPARK_CONF_DIR/
-#RUN ln -s $SPARK_HOME/jars/scala-library-*.jar $HIVE_HOME/lib \
-#    && ln -s $SPARK_HOME/jars/spark-core_*.jar $HIVE_HOME/lib \
-#    && ln -s $SPARK_HOME/jars/spark-network-common_*.jar $HIVE_HOME/lib
+ENV SPARK_DIST_CLASSPATH=$SPARK_DIST_CLASSPATH:$HIVE_HOME/lib/*
+COPY conf/hive/hive-site.xml $SPARK_CONF_DIR/
+RUN ln -s $SPARK_HOME/jars/scala-library-*.jar $HIVE_HOME/lib \
+    && ln -s $SPARK_HOME/jars/spark-core_*.jar $HIVE_HOME/lib \
+    && ln -s $SPARK_HOME/jars/spark-network-common_*.jar $HIVE_HOME/lib
 
 # Clean up
 RUN rm -rf "${HIVE_HOME}/examples" \
